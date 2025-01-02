@@ -42,6 +42,10 @@ impl Direction {
         Self::of(false, current)
     }
 
+    fn last(self) -> Result<Direction, ValidateError> {
+        Self::next(self, false)
+    }
+
     fn next(self, current: bool) -> Result<Direction, ValidateError> {
         match self {
             Self::Right => Self::of(true, current),
@@ -76,6 +80,10 @@ mod tests {
         assert_eq!(
             Direction::first(true)?.next(true),
             Err(ValidateError::ConsecutiveTrueError)
+        );
+        assert_eq!(
+            Direction::first(true)?.next(false)?.last(),
+            Ok(Direction::Stay)
         );
         Ok(())
     }
